@@ -15,7 +15,7 @@ import {
   useContractLoader,
   useContractReader,
   useGasPrice,
-  useOnBlock,
+  usePoller,
   useUserProviderAndSigner,
 } from "eth-hooks";
 import { useEventListener } from "eth-hooks/events/useEventListener";
@@ -231,11 +231,10 @@ function App(props) {
   // If you want to bring in the mainnet DAI contract it would look like:
   const mainnetContracts = useContractLoader(mainnetProvider, contractConfig);
 
-  // If you want to call a function on a new block
-  useOnBlock(localProvider, () => {
-    console.log(`⛓ A new rinkeby block is here: ${localProvider._lastBlockNumber}`);
+  // call every 1500 seconds.
+  usePoller(() => {
     updateLoogieTanks();
-  });
+  }, 1500000);
 
   // Then read your DAI balance like:
   const myMainnetDAIBalance = useContractReader(mainnetContracts, "DAI", "balanceOf", [
