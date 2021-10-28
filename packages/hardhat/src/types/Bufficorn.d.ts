@@ -27,6 +27,7 @@ interface BufficornInterface extends ethers.utils.Interface {
     "balanceOf(address)": FunctionFragment;
     "baseURI()": FunctionFragment;
     "contractState(uint8)": FunctionFragment;
+    "contractURI()": FunctionFragment;
     "ethSink()": FunctionFragment;
     "getApproved(uint256)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
@@ -42,6 +43,7 @@ interface BufficornInterface extends ethers.utils.Interface {
     "setApprovalForAll(address,bool)": FunctionFragment;
     "setBaseURI(string)": FunctionFragment;
     "setContractState(uint8,bool)": FunctionFragment;
+    "setContractURI(string)": FunctionFragment;
     "setRoot(bytes32)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "symbol()": FunctionFragment;
@@ -62,6 +64,10 @@ interface BufficornInterface extends ethers.utils.Interface {
   encodeFunctionData(
     functionFragment: "contractState",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "contractURI",
+    values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "ethSink", values?: undefined): string;
   encodeFunctionData(
@@ -108,6 +114,10 @@ interface BufficornInterface extends ethers.utils.Interface {
     functionFragment: "setContractState",
     values: [BigNumberish, boolean]
   ): string;
+  encodeFunctionData(
+    functionFragment: "setContractURI",
+    values: [string]
+  ): string;
   encodeFunctionData(functionFragment: "setRoot", values: [BytesLike]): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
@@ -144,6 +154,10 @@ interface BufficornInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "baseURI", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "contractState",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "contractURI",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "ethSink", data: BytesLike): Result;
@@ -186,6 +200,10 @@ interface BufficornInterface extends ethers.utils.Interface {
   decodeFunctionResult(functionFragment: "setBaseURI", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "setContractState",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "setContractURI",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "setRoot", data: BytesLike): Result;
@@ -293,6 +311,18 @@ export class Bufficorn extends Contract {
       overrides?: CallOverrides
     ): Promise<{
       0: boolean;
+    }>;
+
+    contractURI(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
+    }>;
+
+    "contractURI()"(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: string;
     }>;
 
     ethSink(
@@ -472,6 +502,16 @@ export class Bufficorn extends Contract {
       overrides?: Overrides
     ): Promise<ContractTransaction>;
 
+    setContractURI(
+      _contractURI: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
+    "setContractURI(string)"(
+      _contractURI: string,
+      overrides?: Overrides
+    ): Promise<ContractTransaction>;
+
     setRoot(
       _root: BytesLike,
       overrides?: Overrides
@@ -622,6 +662,10 @@ export class Bufficorn extends Contract {
     overrides?: CallOverrides
   ): Promise<boolean>;
 
+  contractURI(overrides?: CallOverrides): Promise<string>;
+
+  "contractURI()"(overrides?: CallOverrides): Promise<string>;
+
   ethSink(overrides?: CallOverrides): Promise<string>;
 
   "ethSink()"(overrides?: CallOverrides): Promise<string>;
@@ -752,6 +796,16 @@ export class Bufficorn extends Contract {
     overrides?: Overrides
   ): Promise<ContractTransaction>;
 
+  setContractURI(
+    _contractURI: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
+  "setContractURI(string)"(
+    _contractURI: string,
+    overrides?: Overrides
+  ): Promise<ContractTransaction>;
+
   setRoot(
     _root: BytesLike,
     overrides?: Overrides
@@ -866,6 +920,10 @@ export class Bufficorn extends Contract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
+
+    contractURI(overrides?: CallOverrides): Promise<string>;
+
+    "contractURI()"(overrides?: CallOverrides): Promise<string>;
 
     ethSink(overrides?: CallOverrides): Promise<string>;
 
@@ -991,6 +1049,16 @@ export class Bufficorn extends Contract {
     "setContractState(uint8,bool)"(
       _state: BigNumberish,
       _enabled: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    setContractURI(
+      _contractURI: string,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    "setContractURI(string)"(
+      _contractURI: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -1132,6 +1200,10 @@ export class Bufficorn extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    contractURI(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "contractURI()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     ethSink(overrides?: CallOverrides): Promise<BigNumber>;
 
     "ethSink()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -1262,6 +1334,16 @@ export class Bufficorn extends Contract {
       overrides?: Overrides
     ): Promise<BigNumber>;
 
+    setContractURI(
+      _contractURI: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
+    "setContractURI(string)"(
+      _contractURI: string,
+      overrides?: Overrides
+    ): Promise<BigNumber>;
+
     setRoot(_root: BytesLike, overrides?: Overrides): Promise<BigNumber>;
 
     "setRoot(bytes32)"(
@@ -1380,6 +1462,10 @@ export class Bufficorn extends Contract {
       arg0: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    contractURI(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    "contractURI()"(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     ethSink(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
@@ -1511,6 +1597,16 @@ export class Bufficorn extends Contract {
     "setContractState(uint8,bool)"(
       _state: BigNumberish,
       _enabled: boolean,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    setContractURI(
+      _contractURI: string,
+      overrides?: Overrides
+    ): Promise<PopulatedTransaction>;
+
+    "setContractURI(string)"(
+      _contractURI: string,
       overrides?: Overrides
     ): Promise<PopulatedTransaction>;
 

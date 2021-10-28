@@ -1,6 +1,9 @@
 {
   "name": "@scaffold-eth/monorepo",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=14.0.0 <15"
+  },
   "keywords": [
     "ethereum",
     "react",

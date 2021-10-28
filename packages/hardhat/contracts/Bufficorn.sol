@@ -66,8 +66,11 @@ contract Bufficorn is ERC721Enumerable, Ownable {
     bytes32 public root; /*Merkle root for presale*/
     string public baseURI; /*baseURI_ String to prepend to token IDs*/
 
+    string public contractURI; /*contractURI contract metadata json*/
+
     /// @dev Construtor sets the token and sale params
     /// @param baseURI_ String to prepend to token IDs
+    /// @param _contractURI Contract metadata json location
     /// @param _root Presale merkle tree root
     /// @param _reserved Number of tokens to reserve for special minting
     /// @param _presaleLimit Max token ID for presale - starts after _reserved
@@ -75,6 +78,7 @@ contract Bufficorn is ERC721Enumerable, Ownable {
     /// @param _sink Recipient of sale ETH
     constructor(
         string memory baseURI_,
+        string memory _contractURI,
         bytes32 _root,
         uint256 _reserved,
         uint256 _presaleLimit,
@@ -83,6 +87,8 @@ contract Bufficorn is ERC721Enumerable, Ownable {
     ) ERC721("Bufficorn Buidl Brigade", "BBB") {
         _setBaseURI(baseURI_);
         root = _root;
+        
+        contractURI = _contractURI;
 
         RESERVED = _reserved;
         PRESALE_LIMIT = _presaleLimit;
@@ -126,7 +132,12 @@ contract Bufficorn is ERC721Enumerable, Ownable {
         root = _root;
     }
 
-
+    /// @notice Set new contract URI
+    /// @param _contractURI Contract metadata json
+    function setContractURI(string memory _contractURI) external onlyOwner {
+        contractURI = _contractURI;
+    }
+    
     /*****************
     EXTERNAL MINTING FUNCTIONS
     *****************/
