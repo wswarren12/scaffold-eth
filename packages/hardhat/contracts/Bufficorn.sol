@@ -50,6 +50,8 @@ import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 ///             - After reveal, swap base URI to decentralized storage like IPFS folder
 ///
 contract Bufficorn is ERC721Enumerable, Ownable {
+    using Strings for uint256;
+    
     uint256 constant MAX_PER_MINT = 20; /*Don't let people buy more than 20 per transaction*/
     uint256 RESERVED; /*Max token ID for reserve*/
     uint256 PRESALE_LIMIT; /*Max token ID for presale- set in constructor*/
@@ -136,6 +138,13 @@ contract Bufficorn is ERC721Enumerable, Ownable {
     /// @param _contractURI Contract metadata json
     function setContractURI(string memory _contractURI) external onlyOwner {
         contractURI = _contractURI;
+    }
+
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
+
+        string memory baseURI = _baseURI();
+        return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, tokenId.toString(), ".json")) : "";
     }
     
     /*****************
