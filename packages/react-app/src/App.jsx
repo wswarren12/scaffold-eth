@@ -46,7 +46,7 @@ import { createMerkleTree, getProof } from "./mint/util";
 */
 
 /// 📡 What chain are your contracts deployed to?
-const targetNetwork = NETWORKS["rinkeby"]; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const targetNetwork = NETWORKS["mainnet"]; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
 const DEBUG = false;
@@ -68,7 +68,7 @@ const localProviderUrlFromEnv = process.env.REACT_APP_PROVIDER ? process.env.REA
 if (DEBUG) console.log("🏠 Connecting to provider:", localProviderUrlFromEnv);
 const localProvider = new JsonRpcProvider(localProviderUrlFromEnv);
 
-const merkleTokensSrc = "https://rinkeby-metadata.s3.amazonaws.com/tokens.json";
+const merkleTokensSrc = "https://prod-metadata.s3.amazonaws.com/tokens.json";
 
 // 🔭 block explorer URL
 const blockExplorer = targetNetwork.blockExplorer;
