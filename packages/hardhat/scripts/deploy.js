@@ -40,10 +40,10 @@ const main = async () => {
     contractURI: "https://rinkeby-metadata.s3.amazonaws.com/contract.json",
     baseUri: "https://rinkeby-metadata.s3.amazonaws.com/tokens/",
     root: merkleTree.getHexRoot(),
-    reserved: 50,
-    presale: 100,
-    public: 200,
-    ethSink: "0xecb7b6e9af2b0386ac604de1b0572472da5c0289",
+    reserved: 600,
+    presale: 5280,
+    public: 10000,
+    ethSink: "0x11CCE80E6EA89C7DA94F670977edBF7673FdCeF4",
   };
   console.log({localConfiguration})
   // deploy the contract with all the artworks forSale
