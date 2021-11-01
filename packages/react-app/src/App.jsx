@@ -327,13 +327,16 @@ function App(props) {
                   </div>
                   <div class="Column">
                     <h1 class="Title" style={{marginBottom: 25}}>Bufficorn Buidl Brigade</h1>
-                    <h2 style={{marginBottom: 25}}>An ETHDenver PFP (10000 max supply)</h2>
+                    <h2 style={{marginBottom: 25}}>An ETHDenver PFP (10,000 max supply)</h2>
                     <h3 style={{marginBottom: 25}}>
                       Created by EthDenver <a class="pink" href="https://twitter.com/EthereumDenver">@ethereumdenver</a>
                     </h3>
                     <Button class="Button" type="primary" href="#Mint">
-                      Coming Nov 4
+                      Pre-Mint on Nov 3rd
                     </Button>
+                    <h3 style={{marginTop: 10}}>
+                      Start minting @ 2 pm EDT, 6 pm UTC
+                    </h3>
                   </div>
                 </div>
               </div>
@@ -354,7 +357,7 @@ function App(props) {
               </div>
               <div class="Section Mint" id="Mint">
               <div class="Block Content">
-                  <h2>Mint on Nov 4</h2>
+                  <h2>Pre-Mint on Nov 3rd @ 2 pm EDT</h2>
                   <p>
                     Learn more in the launch article on <a href="https://medium.com/ethdenver/introducing-the-bufficorn-buidl-brigade-149e69b98a98" target="_blank" rel="noopener noreferrer">Medium.</a>
                   </p>
@@ -437,7 +440,7 @@ function App(props) {
                       <div class="Point" />
                     </div>
                     <div class="Column">
-                      <div class="Stop"><h5>Nov 4 2021</h5><h4>Initial Drop</h4></div>
+                      <div class="Stop"><h5>Nov 3rd / 4th 2021 @ 2pm EDT</h5><h4>Pre-mint / Public Mint </h4></div>
                       <div class="LineSpacer" />
                       <div class="Stop"><h5>Dec 2021</h5><h4>Signed Artist Print</h4></div>
                       <div class="LineSpacer" />
@@ -528,44 +531,6 @@ function App(props) {
       </div>
 
       {/* 🗺 Extra UI like gas price, eth price, faucet, and support: */}
-      <div style={{ position: "fixed", textAlign: "left", left: 0, bottom: 20, padding: 10 }}>
-        <Row align="middle" gutter={[4, 4]}>
-          <Col span={8}>
-            <Ramp price={price} address={address} networks={NETWORKS} />
-          </Col>
-
-          <Col span={8} style={{ textAlign: "center", opacity: 0.8 }}>
-            <GasGauge gasPrice={gasPrice} />
-          </Col>
-          <Col span={8} style={{ textAlign: "center", opacity: 1 }}>
-            <Button
-              onClick={() => {
-                window.open("https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA");
-              }}
-              size="large"
-              shape="round"
-            >
-              <span style={{ marginRight: 8 }} role="img" aria-label="support">
-                💬
-              </span>
-              Support
-            </Button>
-          </Col>
-        </Row>
-
-        <Row align="middle" gutter={[4, 4]}>
-          <Col span={24}>
-            {
-              /*  if the local provider has a signer, let's show the faucet:  */
-              faucetAvailable ? (
-                <Faucet localProvider={localProvider} price={price} ensProvider={mainnetProvider} />
-              ) : (
-                ""
-              )
-            }
-          </Col>
-        </Row>
-      </div>
 
     </div>
   );
