@@ -306,6 +306,8 @@ function App(props) {
       <Menu.Item key="1">Mint 1</Menu.Item>
       <Menu.Item key="3">Mint 3</Menu.Item>
       <Menu.Item key="5">Mint 5</Menu.Item>
+      <Menu.Item key="10">Mint 10</Menu.Item>
+      <Menu.Item key="20">Mint 20</Menu.Item>
     </Menu>
   );
 
@@ -319,6 +321,8 @@ function App(props) {
       <Menu.Item key="1">Mint 1</Menu.Item>
       <Menu.Item key="3">Mint 3</Menu.Item>
       <Menu.Item key="5">Mint 5</Menu.Item>
+      <Menu.Item key="10">Mint 10</Menu.Item>
+      <Menu.Item key="20">Mint 20</Menu.Item>
     </Menu>
   );
 
