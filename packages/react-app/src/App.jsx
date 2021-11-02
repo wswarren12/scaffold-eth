@@ -135,6 +135,25 @@ function App(props) {
   const transferEvents = useEventListener(readContracts, "Bufficorn", "Transfer", localProvider, 1);
   console.log("📟 Transfer events:", transferEvents);
 
+  const [premintEnabled, setPremintEnabled] = useState(false);
+  const [pubMintEnabled, setPubMintEnabled] = useState(false);
+
+  useEffect(() => {
+    const checkMintState = async () => {
+      console.log({premintEnabled, pubMintEnabled})
+      try {
+        const premintState = await readContracts.Bufficorn.contractState(0);
+        const pubmintState = await readContracts.Bufficorn.contractState(1);
+        setPremintEnabled(premintState)
+        setPubMintEnabled(pubmintState)
+        
+      } catch (error) {
+        
+      }
+    };
+    checkMintState();
+  }, [address]);
+
   // Track if connected address qualifies for preminting
   const [premintQualified, setPremintQualified] = useState(false);
   const [premintAddresses, setPremintAddresses] = useState();
@@ -425,7 +444,7 @@ function App(props) {
                         <Dropdown.Button
                           class="Button"
                           type={"primary"}
-                          disabled={!premintQualified}
+                          disabled={!premintQualified || !premintEnabled}
                           overlay={premintMenu}
                           onClick={async () => premint(address, 1)}
                         >
@@ -448,6 +467,7 @@ function App(props) {
                       {address ? (
                         <Dropdown.Button
                           type={"primary"}
+                          disabled={!pubMintEnabled}
                           overlay={publicMintMenu}
                           onClick={async () => {
                             tx(writeContracts.Bufficorn.mintOpensale(1, { value: priceToMint }));
