@@ -174,7 +174,6 @@ function App(props) {
 
   // fetch merkle addresses
   const [merkleTree, setMerkleTree] = useState();
-  console.log("👋 allowList:", merkleTree);
 
   useEffect(() => {
     const getAllowList = async () => {
