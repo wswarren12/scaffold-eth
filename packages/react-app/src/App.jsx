@@ -434,7 +434,7 @@ function App(props) {
                           overlay={premintMenu}
                           onClick={async () => premint(address, 1)}
                         >
-                          MINT for Ξ{priceToMint && (+ethers.utils.formatEther(priceToPremint)).toFixed(4)}
+                          MINT for Ξ {priceToMint && (+ethers.utils.formatEther(priceToPremint)).toFixed(4)}
                         </Dropdown.Button>
                       ) : (
                         <Button class="Button" key="loginbutton" type="primary" onClick={loadWeb3Modal}>
@@ -464,7 +464,7 @@ function App(props) {
                             tx(writeContracts.Bufficorn.mintOpensale(1, { value: priceToMint }));
                           }}
                         >
-                          MINT for Ξ{priceToMint && (+ethers.utils.formatEther(priceToMint)).toFixed(4)}
+                          MINT for Ξ {priceToMint && (+ethers.utils.formatEther(priceToMint)).toFixed(1)}
                         </Dropdown.Button>
                       ) : (
                         <Button key="loginbutton" type="primary" onClick={loadWeb3Modal}>
