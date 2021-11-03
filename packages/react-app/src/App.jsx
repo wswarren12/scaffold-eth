@@ -516,7 +516,7 @@ function App(props) {
                     renderItem={item => {
                       const id = item.id;
                       return (
-                        <a href={`https://opensea.io/assets/0x8b13e88EAd7EF8075b58c94a7EB18A89FD729B18/${item.id}`}>
+                        <a href={`https://opensea.io/assets/0x1e988ba4692e52bc50b375bcc8585b95c48aad77/${item.id}`}>
                           <List.Item style={{ display: "inline-block", border: "none", margin: 10 }}>
                             <Card
                               style={{ borderBottom: "none", border: "none", background: "none" }}
