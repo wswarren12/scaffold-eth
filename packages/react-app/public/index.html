@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bufficorn Buidl Brigade</title>
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="manifest" href="site.webmanifest">
-  <meta name="msapplication-TileColor" content="#da532c">
-  <meta name="theme-color" content="#ffffff">
-
-  <!--  TODO Bufficorn -->
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@EthereumDenver" />
-<meta name="twitter:title" content="Bufficorn Buidle Brigade" />
-<meta name="twitter:description" content="" />
-<meta name="twitter:image" content="" />
+  <head>
+    <title>Bufficorn Buidl Brigade</title>
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <meta name="description" content="Bufficorn Buidl Brigade is a utility-based NFT PFP community brought to you by SporkDAO & ETHDenver">
+  
+    <!--  TODO Bufficorn -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content="@EthereumDenver" />
+  <meta name="twitter:title" content="Bufficorn Buidl Brigade" />
+  <meta name="twitter:description" content="Bufficorn Buidl Brigade is a utility-based NFT PFP community brought to you by SporkDAO & ETHDenver" />
+  <meta name="twitter:image" content="bufficorn_header-buffiLeft-textRight.jpg" />
+  <!---Open Graph-->
+  <meta property="og:image" content="bufficorn_header-buffiLeft-textRight.jpg">
+  <meta property="og:description" content="Bufficorn Buidl Brigade is a utility-based NFT PFP community brought to you by SporkDAO & ETHDenver">
+  <meta property="og:title" content="Bufficorn Buidl Brigade">
+  
+  </head>
 
 </head>
 
@@ -25,11 +33,14 @@
 
 
     <style type="text/css">
+
+      @import url('https://fonts.googleapis.com/css2?family=Catamaran:wght@300;400;500;600;700;800;900&display=swap');
+
       body{
         color:  #c9b8ff;
         /* background: url('background_3.png') repeat; */
         text-align: left;
-        font-family: "Garamond",monospace;
+        font-family: "Catamaran", sans-serif;
         font-style: normal;
         font-variant-ligatures: normal;
         font-variant-caps: normal;
@@ -109,6 +120,11 @@
         font-weight: 900;
         letter-spacing: 0.05em;
       }
+
+      .pink {
+        color: #fc5090;
+      }
+
       .ant-btn-primary{
         background-color: #fc5090;
         border: 5px solid #fc5090;
@@ -138,8 +154,8 @@
 
       .Section {
         width: 100%;
-        padding-top: 150px;
-        padding-bottom: 150px;
+        padding-top: 75px;
+        padding-bottom: 50px;
       }
 
       .Content {
@@ -224,14 +240,15 @@
         opacity: 1;
       }
       .LineSpacer {
-        height: 60px;
+        height: 50px;
         width: 4px;
         background-color: rgba(255,255,255,0);
       }
       .Stop {
         display: flex;
-        align-items: center;
-        justify-content: start;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-start;
         margin: 0;
       }
       .Stop h4, .Stop h5 { margin: 0; margin-right: 15px; }
@@ -421,6 +438,12 @@ h1:before {
         font-size: 24px;
       }
 
+      @media all and (min-width: 1201px) {
+        .LineSpacer {
+          height: 38px;
+        }
+      }
+
       @media all and (max-width: 1200px) {
         .Column {
           width: 100%;
@@ -428,6 +451,16 @@ h1:before {
         }
       }
 
+      .Trailmap h4 {
+          font-size: 0.75em;
+        }
+      
+
+      @media all and (max-width: 700px) {
+        .LineSpacer.FinalStop {
+          height: 23px;
+        }
+      }
     </style>
     <!--
       This HTML file is a template.
