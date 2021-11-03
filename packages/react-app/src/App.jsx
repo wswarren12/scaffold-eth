@@ -209,15 +209,19 @@ function App(props) {
             try {
               let tokenId = transferEvents[buffIndex].tokenId.toNumber();
               const tokenURI = await readContracts.Bufficorn.tokenURI(tokenId);
-              // const ipfsHash = tokenURI.replace("https://gateway.pinata.cloud/ipfs/", "");
-              // const jsonManifestBuffer = await getFromIPFS(ipfsHash);
-              const jsonManifest = {
-                name: "Placeholder",
-                image: "logo.png",
-              };
+              
+
+              const myHeaders = new Headers();
+              myHeaders.append("Content-Type", "application/json");
+                const requestOptions = {
+                  method: 'GET',
+                  headers: myHeaders,
+                  redirect: 'follow'
+                };
 
               try {
-                // const jsonManifest = JSON.parse(jsonManifestBuffer.toString());
+                const res = await fetch(tokenURI, requestOptions)
+                const jsonManifest = await res.json()
                 latestMintedBufficornsUpdate.push({ id: tokenId, uri: tokenURI, owner: address, ...jsonManifest });
               } catch (e) {
                 console.log(e);
