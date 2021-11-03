@@ -50,6 +50,8 @@ import "@openzeppelin/contracts/utils/cryptography/MerkleProof.sol";
 ///             - After reveal, swap base URI to decentralized storage like IPFS folder
 ///
 contract Bufficorn is ERC721Enumerable, Ownable {
+    using Strings for uint256;
+    
     uint256 constant MAX_PER_MINT = 20; /*Don't let people buy more than 20 per transaction*/
     uint256 RESERVED; /*Max token ID for reserve*/
     uint256 PRESALE_LIMIT; /*Max token ID for presale- set in constructor*/
@@ -66,8 +68,11 @@ contract Bufficorn is ERC721Enumerable, Ownable {
     bytes32 public root; /*Merkle root for presale*/
     string public baseURI; /*baseURI_ String to prepend to token IDs*/
 
+    string public contractURI; /*contractURI contract metadata json*/
+
     /// @dev Construtor sets the token and sale params
     /// @param baseURI_ String to prepend to token IDs
+    /// @param _contractURI Contract metadata json location
     /// @param _root Presale merkle tree root
     /// @param _reserved Number of tokens to reserve for special minting
     /// @param _presaleLimit Max token ID for presale - starts after _reserved
@@ -75,6 +80,7 @@ contract Bufficorn is ERC721Enumerable, Ownable {
     /// @param _sink Recipient of sale ETH
     constructor(
         string memory baseURI_,
+        string memory _contractURI,
         bytes32 _root,
         uint256 _reserved,
         uint256 _presaleLimit,
@@ -83,6 +89,8 @@ contract Bufficorn is ERC721Enumerable, Ownable {
     ) ERC721("Bufficorn Buidl Brigade", "BBB") {
         _setBaseURI(baseURI_);
         root = _root;
+        
+        contractURI = _contractURI;
 
         RESERVED = _reserved;
         PRESALE_LIMIT = _presaleLimit;
@@ -126,7 +134,19 @@ contract Bufficorn is ERC721Enumerable, Ownable {
         root = _root;
     }
 
+    /// @notice Set new contract URI
+    /// @param _contractURI Contract metadata json
+    function setContractURI(string memory _contractURI) external onlyOwner {
+        contractURI = _contractURI;
+    }
 
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
+
+        string memory baseURI = _baseURI();
+        return bytes(baseURI).length > 0 ? string(abi.encodePacked(baseURI, tokenId.toString(), ".json")) : "";
+    }
+    
     /*****************
     EXTERNAL MINTING FUNCTIONS
     *****************/

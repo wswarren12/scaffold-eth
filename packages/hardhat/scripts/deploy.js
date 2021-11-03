@@ -37,15 +37,19 @@ const main = async () => {
   console.log(" \n")
 */
   const localConfiguration = {
-    baseUri: "test:",
-    reserved: 25,
-    presale: 50,
-    public: 75,
-    ethSink: "0xde21F729137C5Af1b01d73aF1dC21eFfa2B8a0d6",
+    contractURI: "https://rinkeby-metadata.s3.amazonaws.com/contract.json",
+    baseUri: "https://rinkeby-metadata.s3.amazonaws.com/tokens/",
+    root: merkleTree.getHexRoot(),
+    reserved: 600,
+    presale: 5280,
+    public: 10000,
+    ethSink: "0x11CCE80E6EA89C7DA94F670977edBF7673FdCeF4",
   };
+  console.log({localConfiguration})
   // deploy the contract with all the artworks forSale
   const bufficorn = await deploy("Bufficorn", [
     localConfiguration.baseUri,
+    localConfiguration.contractURI,
     merkleTree.getHexRoot(),
     localConfiguration.reserved,
     localConfiguration.presale,
@@ -56,10 +60,10 @@ const main = async () => {
   await bufficorn.setContractState(1, true);
 
   // send testnet eth to MM
-  await accounts[0].sendTransaction({
-    to: "0x744222844bFeCC77156297a6427B5876A6769e19",
-    value: ethers.utils.parseEther("1"),
-  });
+  // await accounts[0].sendTransaction({
+  //   to: "0x744222844bFeCC77156297a6427B5876A6769e19",
+  //   value: ethers.utils.parseEther("1"),
+  // });
 
   //await yourCollectible.transferOwnership("0x569F26ED0E0f55c5e4d31687da620A8C4B24b8b6")
   //const yourContract = await ethers.getContractAt('YourContract', "0xaAC799eC2d00C013f1F11c37E654e59B0429DF6A") //<-- if you want to instantiate a version of a contract at a specific address!

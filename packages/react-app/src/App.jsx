@@ -8,6 +8,7 @@ import { Row, Col, Button, Menu, Alert, Input, List, Card, Switch as SwitchD, Sp
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { useUserAddress } from "eth-hooks";
+
 import {
   useExchangePrice,
   useGasPrice,
@@ -23,7 +24,7 @@ import { utils, ethers } from "ethers";
 //import Hints from "./Hints";
 import { INFURA_ID, NETWORK, NETWORKS } from "./constants";
 
-import { getProof, premintAddresses } from "./mint/util";
+import { createMerkleTree, getProof } from "./mint/util";
 
 /*
     Welcome to 🏗 scaffold-eth !
@@ -45,10 +46,10 @@ import { getProof, premintAddresses } from "./mint/util";
 */
 
 /// 📡 What chain are your contracts deployed to?
-const targetNetwork = NETWORKS["localhost"]; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
+const targetNetwork = NETWORKS["mainnet"]; // <------- select your target frontend network (localhost, rinkeby, xdai, mainnet)
 
 // 😬 Sorry for all the console logging
-const DEBUG = true;
+const DEBUG = false;
 
 // 🛰 providers
 if (DEBUG) console.log("📡 Connecting to Mainnet Ethereum");
@@ -66,6 +67,8 @@ const localProviderUrl = targetNetwork.rpcUrl;
 const localProviderUrlFromEnv = process.env.REACT_APP_PROVIDER ? process.env.REACT_APP_PROVIDER : localProviderUrl;
 if (DEBUG) console.log("🏠 Connecting to provider:", localProviderUrlFromEnv);
 const localProvider = new JsonRpcProvider(localProviderUrlFromEnv);
+
+const merkleTokensSrc = "https://prod-metadata.s3.amazonaws.com/tokens.json";
 
 // 🔭 block explorer URL
 const blockExplorer = targetNetwork.blockExplorer;
@@ -132,21 +135,64 @@ function App(props) {
   const transferEvents = useEventListener(readContracts, "Bufficorn", "Transfer", localProvider, 1);
   console.log("📟 Transfer events:", transferEvents);
 
+  const [premintEnabled, setPremintEnabled] = useState(false);
+  const [pubMintEnabled, setPubMintEnabled] = useState(false);
+
+  useEffect(() => {
+    const checkMintState = async () => {
+      console.log({premintEnabled, pubMintEnabled})
+      try {
+        const premintState = await readContracts.Bufficorn.contractState(0);
+        const pubmintState = await readContracts.Bufficorn.contractState(1);
+        setPremintEnabled(premintState)
+        setPubMintEnabled(pubmintState)
+        
+      } catch (error) {
+        
+      }
+    };
+    checkMintState();
+  }, [address]);
+
   // Track if connected address qualifies for preminting
   const [premintQualified, setPremintQualified] = useState(false);
+  const [premintAddresses, setPremintAddresses] = useState();
   console.log("premintQualified:", premintQualified);
 
   useEffect(() => {
     const checkQualified = async () => {
-      if (premintAddresses.indexOf(address.toLowerCase()) > -1) setPremintQualified(true);
+      console.log({premintAddresses})
+      if (premintAddresses?.indexOf(address.toLowerCase()) > -1) setPremintQualified(true);
       else setPremintQualified(false);
     };
     checkQualified();
-  }, [address]);
+  }, [address, premintAddresses]);
 
   // track the lastest bots minted
   const [latestMintedBufficorns, setLatestMintedBufficorns] = useState();
   console.log("📟 latestBuffsMinted:", latestMintedBufficorns);
+
+  // fetch merkle addresses
+  const [merkleTree, setMerkleTree] = useState();
+
+  useEffect(() => {
+    const getAllowList = async () => {
+      const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+      const requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+      const res = await fetch(merkleTokensSrc, requestOptions)
+      const allowList = await res.json()
+      console.log({allowList})
+      const newMerkleTree = createMerkleTree(allowList);
+      setMerkleTree(newMerkleTree);
+      setPremintAddresses(allowList.addresses);
+    };
+    getAllowList();
+  }, [merkleTokensSrc]);
 
   //
   // 🧠 This effect will update latestMintedBots by polling when your balance or address changes.
@@ -265,7 +311,7 @@ function App(props) {
   }
 
   async function premint(address, quantity) {
-    const proof = getProof(address);
+    const proof = getProof(merkleTree, address);
     tx(writeContracts.Bufficorn.mintPresale(quantity, proof, { value: priceToPremint.mul(quantity) }));
   }
 
@@ -278,6 +324,8 @@ function App(props) {
       <Menu.Item key="1">Mint 1</Menu.Item>
       <Menu.Item key="3">Mint 3</Menu.Item>
       <Menu.Item key="5">Mint 5</Menu.Item>
+      <Menu.Item key="10">Mint 10</Menu.Item>
+      <Menu.Item key="20">Mint 20</Menu.Item>
     </Menu>
   );
 
@@ -291,6 +339,8 @@ function App(props) {
       <Menu.Item key="1">Mint 1</Menu.Item>
       <Menu.Item key="3">Mint 3</Menu.Item>
       <Menu.Item key="5">Mint 5</Menu.Item>
+      <Menu.Item key="10">Mint 10</Menu.Item>
+      <Menu.Item key="20">Mint 20</Menu.Item>
     </Menu>
   );
 
@@ -326,16 +376,18 @@ function App(props) {
                     <img class="img_hero" src="Bufficorn_astronaut.png" />
                   </div>
                   <div class="Column">
-                    <h1 class="Title" style={{marginBottom: 25}}>Bufficorn Buidl Brigade</h1>
-                    <h2 style={{marginBottom: 25}}>An ETHDenver PFP (10000 max supply)</h2>
-                    <h3 style={{marginBottom: 25}}>
+                    <h1 class="Title" style={{ marginBottom: 25 }}>
+                      Bufficorn Buidl Brigade
+                    </h1>
+                    <h2 style={{ marginBottom: 25 }}>An ETHDenver PFP (10000 max supply)</h2>
+                    <h3 style={{ marginBottom: 25 }}>
                       Created by EthDenver <a href="https://twitter.com/EthereumDenver">@ethereumdenver</a>
                     </h3>
 
                     {address ? (
-                        <Button class="Button" type="primary" href="#Mint">
-                          Mint a Bufficorn &darr;
-                        </Button>
+                      <Button class="Button" type="primary" href="#Mint">
+                        Mint a Bufficorn &darr;
+                      </Button>
                     ) : (
                       <Button class="Button" key="loginbutton" type="primary" onClick={loadWeb3Modal}>
                         connect to mint
@@ -351,8 +403,24 @@ function App(props) {
                   </div>
                   <div class="Column">
                     <h2>Lore of the Bufficorn</h2>
-                    <p>The Bufficorn (monocerus magicalis bisonae) are a rare and magical creature native to the Continental Divide region of Colorado’s Rocky Mountains. Although endangered, their population is making considerable resurgence as of 2018. Currently, there are around 10,000 known Bufficorns roaming the wild.</p>
-                    <p>Bufficorns were first discovered in the late 1850s, just outside of today’s ski town Breckenridge, Colorado by Casper Bunyan, a prominent silver prospector of his day. Bunyan, while prospecting the Mosquito Range, saw what he described as a “pink sparkling mass of brown fur” off in the distance, near the summit of Quandary Peak. In addition to their natural magesty, they are known as voraceous buidlers, with each having a unique personality, appearance, and skillset. Learn more about the Bufficorn in the <a href="" target="_blank" rel="noopener noreferrer">Medium post</a>.</p>
+                    <p>
+                      The Bufficorn (monocerus magicalis bisonae) are a rare and magical creature native to the
+                      Continental Divide region of Colorado’s Rocky Mountains. Although endangered, their population is
+                      making considerable resurgence as of 2018. Currently, there are around 10,000 known Bufficorns
+                      roaming the wild.
+                    </p>
+                    <p>
+                      Bufficorns were first discovered in the late 1850s, just outside of today’s ski town Breckenridge,
+                      Colorado by Casper Bunyan, a prominent silver prospector of his day. Bunyan, while prospecting the
+                      Mosquito Range, saw what he described as a “pink sparkling mass of brown fur” off in the distance,
+                      near the summit of Quandary Peak. In addition to their natural magesty, they are known as
+                      voraceous buidlers, with each having a unique personality, appearance, and skillset. Learn more
+                      about the Bufficorn in the{" "}
+                      <a href="" target="_blank" rel="noopener noreferrer">
+                        Medium post
+                      </a>
+                      .
+                    </p>
                   </div>
                 </div>
               </div>
@@ -375,13 +443,13 @@ function App(props) {
                         <Dropdown.Button
                           class="Button"
                           type={"primary"}
-                          disabled={!premintQualified}
+                          disabled={!premintQualified || !premintEnabled}
                           overlay={premintMenu}
                           onClick={async () => premint(address, 1)}
                         >
                           MINT for Ξ{priceToMint && (+ethers.utils.formatEther(priceToPremint)).toFixed(4)}
                         </Dropdown.Button>
-                    ) : (
+                      ) : (
                         <Button class="Button" key="loginbutton" type="primary" onClick={loadWeb3Modal}>
                           connect to mint
                         </Button>
@@ -398,6 +466,7 @@ function App(props) {
                       {address ? (
                         <Dropdown.Button
                           type={"primary"}
+                          disabled={!pubMintEnabled}
                           overlay={publicMintMenu}
                           onClick={async () => {
                             tx(writeContracts.Bufficorn.mintOpensale(1, { value: priceToMint }));
@@ -417,8 +486,8 @@ function App(props) {
 
               <div class="Section Trailmap">
                 <div class="Content">
-                  <div class="FlexRow" style={{width: '100%'}}>
-                    <h2 style={{marginBottom: 50}}>Trail of the Bufficorns</h2>
+                  <div class="FlexRow" style={{ width: "100%" }}>
+                    <h2 style={{ marginBottom: 50 }}>Trail of the Bufficorns</h2>
                   </div>
                   <div class="FlexRow">
                     <div class="Column">
@@ -429,11 +498,20 @@ function App(props) {
                       <div class="Point" />
                     </div>
                     <div class="Column">
-                      <div class="Stop"><h5>Halloween 2021</h5><h4>Launch of the Bufficorns</h4></div>
+                      <div class="Stop">
+                        <h5>Halloween 2021</h5>
+                        <h4>Launch of the Bufficorns</h4>
+                      </div>
                       <div class="LineSpacer" />
-                      <div class="Stop"><h5>Q1 2022</h5><h4>Cool stuff</h4></div>
+                      <div class="Stop">
+                        <h5>Q1 2022</h5>
+                        <h4>Cool stuff</h4>
+                      </div>
                       <div class="LineSpacer" />
-                      <div class="Stop"><h5>Q2 2022</h5><h4>Cooler stuff</h4></div>
+                      <div class="Stop">
+                        <h5>Q2 2022</h5>
+                        <h4>Cooler stuff</h4>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -499,10 +577,7 @@ function App(props) {
                   OpenSea
                 </a>
                 |
-                <a
-                  style={{ padding: 8 }}
-                  href="https://etherscan.io/token/0x8b13e88ead7ef8075b58c94a7eb18a89fd729b18"
-                >
+                <a style={{ padding: 8 }} href="https://etherscan.io/token/0x8b13e88ead7ef8075b58c94a7eb18a89fd729b18">
                   EtherScan
                 </a>
                 |
@@ -601,7 +676,6 @@ function App(props) {
           </Col>
         </Row>
       </div>
-
     </div>
   );
 }
