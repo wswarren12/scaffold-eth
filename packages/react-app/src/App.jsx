@@ -462,7 +462,6 @@ function App(props) {
                       {address ? (
                         <Dropdown.Button
                           type={"primary"}
-                          disabled={!pubMintEnabled}
                           overlay={publicMintMenu}
                           onClick={async () => {
                             tx(writeContracts.Bufficorn.mintOpensale(1, { value: priceToMint }));
