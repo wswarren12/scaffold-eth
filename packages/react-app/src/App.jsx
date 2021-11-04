@@ -428,13 +428,13 @@ function App(props) {
                     <p>
                       <i>Must hold 1900 Spork</i>
                     </p>
-                    <p>5280 available</p>
+                    <p>1500 Minted</p>
                     <div>
                       {address ? (
                         <Dropdown.Button
                           class="Button"
                           type={"primary"}
-                          disabled={!premintQualified || !premintEnabled}
+                          disabled={true}
                           overlay={premintMenu}
                           onClick={async () => premint(address, 1)}
                         >
