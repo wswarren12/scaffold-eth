@@ -434,7 +434,7 @@ function App(props) {
                         <Dropdown.Button
                           class="Button"
                           type={"primary"}
-                          disabled={!premintQualified}
+                          disabled={!premintQualified || !premintEnabled}
                           overlay={premintMenu}
                           onClick={async () => premint(address, 1)}
                         >
