@@ -14,7 +14,6 @@ import {
   useGasPrice,
   useContractLoader,
   useContractReader,
-  useEventListener,
   useBalance,
 } from "./hooks";
 import { Header, Account, Faucet, Ramp, Contract, GasGauge, Address, AddressInput, ThemeSwitch } from "./components";
@@ -131,9 +130,6 @@ function App(props) {
   const amountMintedAlready = useContractReader(readContracts, "Bufficorn", "totalSupply");
   console.log("🤗 amountMintedAlready:", amountMintedAlready);
 
-  //📟 Listen for broadcast events
-  const transferEvents = useEventListener(readContracts, "Bufficorn", "Transfer", localProvider, 1);
-  console.log("📟 Transfer events:", transferEvents);
 
   const [premintEnabled, setPremintEnabled] = useState(false);
   const [pubMintEnabled, setPubMintEnabled] = useState(false);
@@ -200,14 +196,14 @@ function App(props) {
   useEffect(() => {
     const getLatestMintedBufficorns = async () => {
       let latestMintedBufficornsUpdate = [];
-      if (transferEvents.length > 0) {
-        for (let buffIndex = 0; buffIndex < transferEvents.length; buffIndex++) {
-          if (
-            transferEvents[buffIndex].from == "0x0000000000000000000000000000000000000000" &&
-            latestMintedBufficornsUpdate.length < 3
-          ) {
+        if (readContracts) {
+
+        const totalSupply = await readContracts.Bufficorn.totalSupply();
+        console.log({totalSupply})
+        if (totalSupply > 3) {
+        for (let buffIndex = 0; buffIndex < 3; buffIndex++) {
             try {
-              let tokenId = transferEvents[buffIndex].tokenId.toNumber();
+              const tokenId = totalSupply - buffIndex
               const tokenURI = await readContracts.Bufficorn.tokenURI(tokenId);
               
 
@@ -229,13 +225,14 @@ function App(props) {
             } catch (e) {
               console.log(e);
             }
-          }
         }
-      }
+
+        }
       setLatestMintedBufficorns(latestMintedBufficornsUpdate);
     };
+        }
     getLatestMintedBufficorns();
-  }, [amountMintedAlready]);
+  }, [readContracts]);
 
   /*
   const addressFromENS = useResolveName(mainnetProvider, "austingriffith.eth");
@@ -525,7 +522,7 @@ function App(props) {
                               style={{ borderBottom: "none", border: "none", background: "none" }}
                               title={
                                 <div style={{ fontSize: 16, marginRight: 8, color: "white" }}>
-                                  <span>#{id}</span> {item.name}
+                                  {item.name}
                                 </div>
                               }
                             >
