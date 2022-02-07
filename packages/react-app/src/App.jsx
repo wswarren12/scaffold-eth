@@ -589,7 +589,7 @@ function App(props) {
           <Col span={8} style={{ textAlign: "center", opacity: 1 }}>
             <Button
               onClick={() => {
-                window.open("https://discord.gg/Dy3eDDn5cB");
+                window.open("https://discord.gg/SporkDAO");
               }}
               size="large"
               shape="round"
