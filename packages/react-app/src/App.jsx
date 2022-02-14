@@ -460,11 +460,12 @@ function App(props) {
                         <Dropdown.Button
                           type={"primary"}
                           overlay={publicMintMenu}
+                          disabled={true}
                           onClick={async () => {
                             tx(writeContracts.Bufficorn.mintOpensale(1, { value: priceToMint }));
                           }}
                         >
-                          MINT for Ξ {priceToMint && (+ethers.utils.formatEther(priceToMint)).toFixed(1)}
+                          Sold Out!
                         </Dropdown.Button>
                       ) : (
                         <Button key="loginbutton" type="primary" onClick={loadWeb3Modal}>
